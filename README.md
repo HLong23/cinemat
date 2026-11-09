@@ -16,8 +16,6 @@ Trong IntelliJ: mở `CinematApplication` → Run.
 - H2 console: http://localhost:8080/h2-console (JDBC URL `jdbc:h2:mem:cinemadb`, user `sa`, mật khẩu trống)
 - Tài khoản mẫu: **admin / admin123** (ADMIN), **user / user123** (USER)
 
-## Đối chiếu tiêu chí chấm điểm
-
 ## Luồng sử dụng
 1. Trang chủ: tìm phim → chi tiết phim (suất chiếu sắp tới).
 2. Chọn suất → đăng nhập → chọn ghế (tối đa 8) → xác nhận → "Vé của tôi" (có thể huỷ).
