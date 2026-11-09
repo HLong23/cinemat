@@ -1,6 +1,5 @@
-// Pipeline CI/CD chạy trên Jenkins cài local (Windows hoặc Linux).
+// Pipeline CI/CD chạy trên Jenkins cài local.
 // Yêu cầu: Jenkins có JDK 17 + Maven đã khai báo trong "Global Tool Configuration"
-// với tên 'JDK17' và 'Maven3'; (tuỳ chọn) Docker nếu muốn deploy bằng container.
 pipeline {
     agent any
 
