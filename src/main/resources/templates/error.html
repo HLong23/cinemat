@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(#{error.title})}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-5 text-center">
+    <h1 class="display-4" th:text="${status}">500</h1>
+    <p class="lead" th:text="#{error.title}">Đã xảy ra lỗi</p>
+    <a th:href="@{/}" class="btn btn-danger" th:text="#{error.back}">Về trang chủ</a>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

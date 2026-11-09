@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(#{confirm.title})}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div th:replace="~{fragments/layout :: flash}"></div>
+
+<main class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h1 class="h4 mb-3" th:text="#{confirm.title}">Xác nhận đặt vé</h1>
+                    <dl class="row mb-0">
+                        <dt class="col-4" th:text="#{confirm.movie}">Phim</dt>
+                        <dd class="col-8" th:text="${showtime.movie.title}">...</dd>
+                        <dt class="col-4" th:text="#{confirm.cinema}">Rạp</dt>
+                        <dd class="col-8"><span th:text="${showtime.room.cinema.name}">Rạp</span> - <span th:text="${showtime.room.name}">Phòng 1</span></dd>
+                        <dt class="col-4" th:text="#{confirm.time}">Suất chiếu</dt>
+                        <dd class="col-8" th:text="${#temporals.format(showtime.startTime, 'dd/MM/yyyy HH:mm')}">...</dd>
+                        <dt class="col-4" th:text="#{common.seats}">Ghế</dt>
+                        <dd class="col-8"><span class="badge text-bg-success me-1" th:each="s : ${seats}" th:text="${s}">A1</span></dd>
+                        <dt class="col-4" th:text="#{common.total}">Tổng tiền</dt>
+                        <dd class="col-8 fw-bold text-danger">
+                            <span th:text="${#numbers.formatInteger(total, 0, 'POINT')}">180.000</span> <span th:text="#{common.currency}">đ</span>
+                        </dd>
+                    </dl>
+                    <p class="small text-muted mt-3" th:text="#{confirm.note}">Ghi chú</p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a th:href="@{/showtimes/{id}/seats(id=${showtime.id})}" class="btn btn-outline-secondary"
+                           th:text="#{confirm.change}">Đổi ghế</a>
+                        <form th:action="@{/booking/cancel-cart}" method="post" class="m-0">
+                            <button type="submit" class="btn btn-outline-danger" th:text="#{common.cancel}">Huỷ</button>
+                        </form>
+                        <form th:action="@{/booking/confirm}" method="post" class="m-0 ms-auto">
+                            <button type="submit" class="btn btn-danger" th:text="#{confirm.submit}">Xác nhận</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

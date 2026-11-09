@@ -2,6 +2,8 @@ spring:
   application:
     name: cinemat
 
+  # Mặc định chạy H2 (in-memory) để dev nhanh, không cần cài DB.
+  # Chạy với MySQL: --spring.profiles.active=mysql
   datasource:
     url: jdbc:h2:mem:cinemadb;MODE=MySQL;DB_CLOSE_DELAY=-1
     username: sa
@@ -16,7 +18,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     open-in-view: false
     properties:
       hibernate:
@@ -25,11 +27,26 @@ spring:
   thymeleaf:
     cache: false
 
+  messages:
+    basename: messages
+    encoding: UTF-8
+    fallback-to-system-locale: false
+
 server:
-  port: 8080
+  port: ${PORT:8080}
+
+app:
+  jwt:
+    # >= 32 ký tự. Khi deploy hãy đặt biến môi trường JWT_SECRET.
+    secret: ${JWT_SECRET:cinemat-super-secret-key-change-me-0123456789abcdef}
+    expiration-ms: 86400000   # 24 giờ
 
 management:
   endpoints:
     web:
       exposure:
         include: health,info
+
+logging:
+  level:
+    vn.edu.cinema.aspect: DEBUG

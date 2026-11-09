@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(#{bookings.title})}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div th:replace="~{fragments/layout :: flash}"></div>
+
+<main class="container py-4">
+    <div class="alert alert-success" th:if="${booked == true}" th:text="#{bookings.success}">Thành công</div>
+    <div class="alert alert-info" th:if="${cancelled == true}" th:text="#{bookings.cancelled}">Đã huỷ</div>
+
+    <h1 class="h4 mb-3" th:text="#{bookings.title}">Vé của tôi</h1>
+    <p class="text-muted" th:if="${bookings.isEmpty()}" th:text="#{bookings.empty}">Chưa có vé.</p>
+
+    <div class="row row-cols-1 row-cols-md-2 g-3">
+        <div class="col" th:each="b : ${bookings}">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h2 class="h6" th:text="${b.movieTitle()}">Phim</h2>
+                        <span class="badge" th:classappend="'badge-status-' + ${b.status()}"
+                              th:text="${#messages.msg('bookings.status.' + b.status())}">Trạng thái</span>
+                    </div>
+                    <p class="small text-muted mb-1">
+                        <span th:text="${b.cinemaName()}">Rạp</span> - <span th:text="${b.roomName()}">Phòng</span><br>
+                        <span th:text="${#temporals.format(b.startTime(), 'dd/MM/yyyy HH:mm')}">Giờ</span>
+                    </p>
+                    <p class="mb-1">
+                        <span th:text="#{common.seats}">Ghế</span>:
+                        <span class="badge text-bg-light border me-1" th:each="s : ${b.seats()}" th:text="${s}">A1</span>
+                    </p>
+                    <p class="mb-1 fw-semibold">
+                        <span th:text="${#numbers.formatInteger(b.totalPrice(), 0, 'POINT')}">180.000</span> <span th:text="#{common.currency}">đ</span>
+                    </p>
+                    <p class="small text-muted mb-2">
+                        <span th:text="#{bookings.time}">Đặt lúc</span>: <span th:text="${#temporals.format(b.createdAt(), 'dd/MM/yyyy HH:mm')}">...</span>
+                    </p>
+                    <form th:if="${b.status().name() == 'CONFIRMED'}" th:action="@{/bookings/{id}/cancel(id=${b.id()})}"
+                          method="post" class="m-0" th:data-confirm="#{bookings.cancel.confirm}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger" th:text="#{bookings.cancel}">Huỷ vé</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

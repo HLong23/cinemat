@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(#{register.title})}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-10 col-md-7 col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h1 class="h4 mb-3" th:text="#{register.title}">Đăng ký</h1>
+                    <div class="alert alert-danger" th:if="${#fields.hasGlobalErrors()}">
+                        <div th:each="e : ${#fields.globalErrors()}" th:text="${e}">Lỗi</div>
+                    </div>
+                    <form th:action="@{/register}" th:object="${form}" method="post" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label" for="username" th:text="#{login.username}">Tên đăng nhập</label>
+                            <input class="form-control" id="username" th:field="*{username}" th:errorclass="is-invalid">
+                            <div class="invalid-feedback" th:errors="*{username}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="fullName" th:text="#{register.fullName}">Họ và tên</label>
+                            <input class="form-control" id="fullName" th:field="*{fullName}" th:errorclass="is-invalid">
+                            <div class="invalid-feedback" th:errors="*{fullName}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="email" th:text="#{register.email}">Email</label>
+                            <input class="form-control" id="email" type="email" th:field="*{email}" th:errorclass="is-invalid">
+                            <div class="invalid-feedback" th:errors="*{email}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="password" th:text="#{login.password}">Mật khẩu</label>
+                            <input class="form-control" id="password" type="password" th:field="*{password}" th:errorclass="is-invalid">
+                            <div class="invalid-feedback" th:errors="*{password}"></div>
+                        </div>
+                        <button class="btn btn-danger w-100" type="submit" th:text="#{register.submit}">Tạo tài khoản</button>
+                    </form>
+                    <p class="small mt-3 mb-0">
+                        <span th:text="#{register.hasAccount}">Đã có tài khoản?</span>
+                        <a th:href="@{/login}" th:text="#{nav.login}">Đăng nhập</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

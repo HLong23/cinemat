@@ -1,0 +1,35 @@
+# Chạy toàn bộ hệ thống (ứng dụng + MySQL):  docker compose up -d --build
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cinemadb
+    ports:
+      - "3307:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: mysql
+      DB_HOST: db
+      DB_PORT: "3306"
+      DB_NAME: cinemadb
+      DB_USER: root
+      DB_PASSWORD: root
+      JWT_SECRET: doi-chuoi-nay-khi-deploy-thuc-te-it-nhat-32-ky-tu
+    ports:
+      - "8080:8080"
+
+volumes:
+  dbdata:

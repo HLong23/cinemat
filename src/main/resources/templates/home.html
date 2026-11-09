@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(#{home.title})}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div th:replace="~{fragments/layout :: flash}"></div>
+
+<main class="container py-4">
+    <section class="hero p-4 p-md-5 mb-4">
+        <h1 class="fw-bold" th:text="#{home.hero}">Đặt vé xem phim nhanh chóng</h1>
+        <p class="lead mb-4" th:text="#{home.hero.sub}">...</p>
+        <form th:action="@{/}" method="get" class="row g-2">
+            <div class="col-12 col-md-8 col-lg-6">
+                <input type="search" name="q" th:value="${q}" class="form-control form-control-lg"
+                       th:placeholder="#{home.search.placeholder}">
+            </div>
+            <div class="col-12 col-md-4 col-lg-3">
+                <button type="submit" class="btn btn-danger btn-lg w-100" th:text="#{home.search.button}">Tìm kiếm</button>
+            </div>
+        </form>
+    </section>
+
+    <!-- Phim xem gần đây: đọc từ cookie "recentMovies" -->
+    <section th:if="${!recentMovies.isEmpty()}" class="mb-4">
+        <h2 class="h5 mb-3" th:text="#{home.recent}">Bạn vừa xem</h2>
+        <div class="d-flex flex-wrap gap-2">
+            <a th:each="m : ${recentMovies}" th:href="@{/movies/{id}(id=${m.id})}" th:text="${m.title}"
+               class="btn btn-outline-secondary btn-sm">Phim</a>
+        </div>
+    </section>
+
+    <h2 class="h4 mb-3" th:text="#{home.title}">Phim đang chiếu</h2>
+    <p class="text-muted" th:if="${movies.isEmpty()}" th:text="#{home.empty}">Không có phim.</p>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+        <div class="col" th:each="m : ${movies}">
+            <div class="card h-100 movie-card shadow-sm">
+                <img th:if="${m.posterUrl != null and !m.posterUrl.isBlank()}" th:src="${m.posterUrl}"
+                     th:alt="${m.title}" class="poster">
+                <div th:unless="${m.posterUrl != null and !m.posterUrl.isBlank()}" class="poster-placeholder"
+                     th:text="${#strings.substring(m.title, 0, 1)}">A</div>
+                <div class="card-body d-flex flex-column">
+                    <h3 class="h6 card-title" th:text="${m.title}">Tên phim</h3>
+                    <p class="card-text small text-muted mb-1" th:text="${m.genre}">Thể loại</p>
+                    <p class="card-text small text-muted">
+                        <span th:text="${m.durationMinutes}">120</span> <span th:text="#{movie.minutes}">phút</span>
+                    </p>
+                    <a th:href="@{/movies/{id}(id=${m.id})}" class="btn btn-sm btn-danger mt-auto"
+                       th:text="#{home.detail}">Xem chi tiết</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

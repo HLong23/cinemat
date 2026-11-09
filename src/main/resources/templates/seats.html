@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(#{seats.title})}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div th:replace="~{fragments/layout :: flash}"></div>
+
+<main class="container py-4">
+    <h1 class="h4" th:text="${seatMap.showtime().movie.title}">Tên phim</h1>
+    <p class="text-muted">
+        <span th:text="${seatMap.showtime().room.cinema.name}">Rạp</span> -
+        <span th:text="#{movie.room}">Phòng</span> <span th:text="${seatMap.showtime().room.name}">1</span> -
+        <span th:text="${#temporals.format(seatMap.showtime().startTime, 'dd/MM/yyyy HH:mm')}">Giờ</span> -
+        <span th:text="${#numbers.formatInteger(seatMap.showtime().price, 0, 'POINT')}">90.000</span>
+        <span th:text="#{common.currency}">đ</span>
+    </p>
+    <p class="small text-muted" th:text="#{seats.hint(${maxSeats})}">Chọn tối đa 8 ghế.</p>
+
+    <form th:action="@{/showtimes/{id}/seats(id=${seatMap.showtime().id})}" method="post">
+        <div class="screen"></div>
+        <div class="text-center small text-muted mb-3" th:text="#{seats.screen}">MÀN HÌNH</div>
+
+        <div class="seat-map-wrap">
+            <div class="seat-row" th:each="row, st : ${seatMap.rows()}">
+                <div class="seat-row-label" th:text="${#strings.substring(row.get(0).code(), 0, 1)}">A</div>
+                <th:block th:each="seat : ${row}">
+                    <input type="checkbox" class="btn-check" name="seats" autocomplete="off"
+                           th:id="'seat-' + ${seat.code()}" th:value="${seat.code()}"
+                           th:disabled="${seat.taken()}" th:checked="${selected.contains(seat.code())}">
+                    <label class="btn seat" th:for="'seat-' + ${seat.code()}"
+                           th:classappend="${seat.taken()} ? 'btn-secondary' : 'btn-outline-success'"
+                           th:text="${seat.code()}">A1</label>
+                </th:block>
+            </div>
+        </div>
+
+        <div class="d-flex flex-wrap justify-content-center gap-3 my-3 small">
+            <span><span class="legend-box border border-success"></span><span th:text="#{seats.free}">Còn trống</span></span>
+            <span><span class="legend-box bg-success"></span><span th:text="#{seats.chosen}">Đang chọn</span></span>
+            <span><span class="legend-box bg-secondary"></span><span th:text="#{seats.taken}">Đã đặt</span></span>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <a th:href="@{/movies/{id}(id=${seatMap.showtime().movie.id})}" class="btn btn-outline-secondary"
+               th:text="#{common.back}">Quay lại</a>
+            <button type="submit" class="btn btn-danger" th:text="#{seats.continue}">Tiếp tục</button>
+        </div>
+    </form>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,44 @@
+:root { --cinemat-accent: #e50914; }
+
+body { background: #f6f7f9; min-height: 100vh; display: flex; flex-direction: column; }
+main { flex: 1 0 auto; }
+.navbar-brand { font-weight: 700; letter-spacing: .5px; }
+.navbar-brand span { color: var(--cinemat-accent); }
+
+.hero {
+  background: linear-gradient(135deg, #141414 0%, #3a0d12 100%);
+  color: #fff;
+  border-radius: 1rem;
+}
+
+/* Thẻ phim */
+.movie-card { transition: transform .15s ease, box-shadow .15s ease; }
+.movie-card:hover { transform: translateY(-4px); box-shadow: 0 .5rem 1.25rem rgba(0,0,0,.15); }
+.poster, .poster-placeholder {
+  width: 100%; aspect-ratio: 2 / 3; object-fit: cover; border-top-left-radius: inherit; border-top-right-radius: inherit;
+}
+.poster-placeholder {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 4rem; font-weight: 700; color: rgba(255,255,255,.85);
+  background: linear-gradient(160deg, #3b3b98, #e50914);
+}
+.poster-lg { max-width: 320px; margin: 0 auto; border-radius: .75rem; overflow: hidden; }
+
+/* Sơ đồ ghế */
+.screen {
+  height: 8px; width: 70%; margin: 0 auto 1.5rem; border-radius: 50% / 100% 100% 0 0;
+  background: #adb5bd; box-shadow: 0 8px 20px rgba(0,0,0,.2);
+}
+.seat-row { display: flex; justify-content: center; gap: .35rem; margin-bottom: .35rem; flex-wrap: nowrap; }
+.seat-row-label { width: 1.5rem; text-align: center; font-weight: 600; color: #6c757d; line-height: 2rem; }
+.seat { width: 2.2rem; height: 2rem; padding: 0; font-size: .7rem; line-height: 2rem; }
+.seat-map-wrap { overflow-x: auto; padding-bottom: .5rem; }
+.legend-box { display: inline-block; width: 1rem; height: 1rem; border-radius: .25rem; vertical-align: middle; margin-right: .25rem; }
+
+.badge-status-CONFIRMED { background: #198754; }
+.badge-status-CANCELLED { background: #6c757d; }
+
+@media (max-width: 575.98px) {
+  .seat { width: 1.9rem; height: 1.8rem; font-size: .6rem; line-height: 1.8rem; }
+  .hero h1 { font-size: 1.6rem; }
+}

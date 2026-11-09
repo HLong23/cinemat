@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(#{login.title})}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-10 col-md-6 col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h1 class="h4 mb-3" th:text="#{login.title}">Đăng nhập</h1>
+                    <div class="alert alert-danger" th:if="${param.error}" th:text="#{login.error}">Sai thông tin</div>
+                    <div class="alert alert-info" th:if="${param.logout}" th:text="#{login.logout}">Đã đăng xuất</div>
+                    <div class="alert alert-success" th:if="${registered}" th:text="#{login.registered}">Đăng ký xong</div>
+
+                    <form th:action="@{/login}" method="post">
+                        <div class="mb-3">
+                            <label class="form-label" for="username" th:text="#{login.username}">Tên đăng nhập</label>
+                            <input class="form-control" id="username" name="username" autofocus required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="password" th:text="#{login.password}">Mật khẩu</label>
+                            <input class="form-control" id="password" name="password" type="password" required>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="remember" name="remember-me">
+                            <label class="form-check-label" for="remember" th:text="#{login.remember}">Ghi nhớ</label>
+                        </div>
+                        <button class="btn btn-danger w-100" type="submit" th:text="#{login.submit}">Đăng nhập</button>
+                    </form>
+                    <p class="small mt-3 mb-0">
+                        <span th:text="#{login.noAccount}">Chưa có tài khoản?</span>
+                        <a th:href="@{/register}" th:text="#{nav.register}">Đăng ký</a>
+                    </p>
+                    <p class="small text-muted mt-2 mb-0">Demo: admin / admin123 &nbsp;|&nbsp; user / user123</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

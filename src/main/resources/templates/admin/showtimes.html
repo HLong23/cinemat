@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Quản lý suất chiếu')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div th:replace="~{fragments/layout :: flash}"></div>
+
+<main class="container py-4">
+    <h1 class="h4 mb-3">Quản lý suất chiếu</h1>
+
+    <form th:action="@{/admin/showtimes}" th:object="${form}" method="post" class="card card-body shadow-sm mb-4" novalidate>
+        <h2 class="h6" th:text="*{id == null} ? 'Thêm suất chiếu mới' : 'Sửa suất chiếu #' + *{id}">Thêm suất chiếu</h2>
+        <div class="alert alert-danger py-2" th:if="${#fields.hasGlobalErrors()}">
+            <div th:each="e : ${#fields.globalErrors()}" th:text="${e}">Lỗi</div>
+        </div>
+        <input type="hidden" th:field="*{id}">
+        <div class="row g-3">
+            <div class="col-12 col-md-4">
+                <label class="form-label" for="movieId">Phim</label>
+                <select class="form-select" id="movieId" th:field="*{movieId}" th:errorclass="is-invalid">
+                    <option value="">-- Chọn phim --</option>
+                    <option th:each="m : ${movies}" th:value="${m.id}" th:text="${m.title}">Phim</option>
+                </select>
+                <div class="invalid-feedback" th:errors="*{movieId}"></div>
+            </div>
+            <div class="col-12 col-md-4">
+                <label class="form-label" for="roomId">Phòng</label>
+                <select class="form-select" id="roomId" th:field="*{roomId}" th:errorclass="is-invalid">
+                    <option value="">-- Chọn phòng --</option>
+                    <option th:each="r : ${rooms}" th:value="${r.id}" th:text="${r.cinema.name} + ' - ' + ${r.name}">Phòng</option>
+                </select>
+                <div class="invalid-feedback" th:errors="*{roomId}"></div>
+            </div>
+            <div class="col-7 col-md-2">
+                <label class="form-label" for="startTime">Giờ chiếu</label>
+                <input class="form-control" id="startTime" type="datetime-local" th:field="*{startTime}" th:errorclass="is-invalid">
+                <div class="invalid-feedback" th:errors="*{startTime}"></div>
+            </div>
+            <div class="col-5 col-md-2">
+                <label class="form-label" for="price">Giá vé (đ)</label>
+                <input class="form-control" id="price" type="number" th:field="*{price}" th:errorclass="is-invalid">
+                <div class="invalid-feedback" th:errors="*{price}"></div>
+            </div>
+        </div>
+        <div class="mt-3 d-flex gap-2">
+            <button type="submit" class="btn btn-danger">Lưu</button>
+            <a th:href="@{/admin/showtimes}" class="btn btn-outline-secondary">Làm mới</a>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle bg-white shadow-sm">
+            <thead class="table-light"><tr><th>#</th><th>Phim</th><th>Rạp - Phòng</th><th>Giờ chiếu</th><th>Giá</th><th></th></tr></thead>
+            <tbody>
+            <tr th:each="s : ${showtimes}">
+                <td th:text="${s.id}">1</td>
+                <td th:text="${s.movie.title}">Phim</td>
+                <td><span th:text="${s.room.cinema.name}">Rạp</span> - <span th:text="${s.room.name}">1</span></td>
+                <td th:text="${#temporals.format(s.startTime, 'dd/MM/yyyy HH:mm')}">Giờ</td>
+                <td th:text="${#numbers.formatInteger(s.price, 0, 'POINT')}">90.000</td>
+                <td class="text-end text-nowrap">
+                    <a class="btn btn-sm btn-outline-primary" th:href="@{/admin/showtimes(edit=${s.id})}">Sửa</a>
+                    <form th:action="@{/admin/showtimes/{id}/delete(id=${s.id})}" method="post" class="d-inline"
+                          data-confirm="Xoá suất chiếu này?">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Xoá</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

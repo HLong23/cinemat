@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Tổng quan quản trị')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container py-4">
+    <h1 class="h4 mb-3">Tổng quan</h1>
+
+    <div class="row row-cols-2 row-cols-md-5 g-3 mb-4">
+        <div class="col"><div class="card text-center shadow-sm"><div class="card-body">
+            <div class="display-6" th:text="${movieCount}">0</div><a class="stretched-link small" th:href="@{/admin/movies}">Phim</a></div></div></div>
+        <div class="col"><div class="card text-center shadow-sm"><div class="card-body">
+            <div class="display-6" th:text="${cinemaCount}">0</div><a class="stretched-link small" th:href="@{/admin/cinemas}">Rạp</a></div></div></div>
+        <div class="col"><div class="card text-center shadow-sm"><div class="card-body">
+            <div class="display-6" th:text="${showtimeCount}">0</div><a class="stretched-link small" th:href="@{/admin/showtimes}">Suất chiếu</a></div></div></div>
+        <div class="col"><div class="card text-center shadow-sm"><div class="card-body">
+            <div class="display-6" th:text="${bookingCount}">0</div><span class="small">Vé đã bán</span></div></div></div>
+        <div class="col"><div class="card text-center shadow-sm"><div class="card-body">
+            <div class="h3 mt-2" th:text="${#numbers.formatInteger(revenue, 0, 'POINT')} + ' đ'">0 đ</div><span class="small">Doanh thu</span></div></div></div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-12 col-lg-7">
+            <h2 class="h5">Vé đã đặt</h2>
+            <div class="table-responsive">
+                <table class="table table-sm bg-white shadow-sm align-middle">
+                    <thead class="table-light"><tr><th>#</th><th>Khách</th><th>Phim</th><th>Giờ chiếu</th><th>Ghế</th><th>Tiền</th><th>TT</th></tr></thead>
+                    <tbody>
+                    <tr th:each="b : ${bookings}">
+                        <td th:text="${b.id()}">1</td>
+                        <td th:text="${b.username()}">user</td>
+                        <td th:text="${b.movieTitle()}">Phim</td>
+                        <td th:text="${#temporals.format(b.startTime(), 'dd/MM HH:mm')}">Giờ</td>
+                        <td th:text="${#strings.listJoin(b.seats(), ',')}">A1</td>
+                        <td th:text="${#numbers.formatInteger(b.totalPrice(), 0, 'POINT')}">0</td>
+                        <td><span class="badge" th:classappend="'badge-status-' + ${b.status()}" th:text="${b.status()}">OK</span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-12 col-lg-5">
+            <h2 class="h5">Nhật ký hệ thống (AOP)</h2>
+            <div class="table-responsive">
+                <table class="table table-sm bg-white shadow-sm">
+                    <thead class="table-light"><tr><th>Thời gian</th><th>Hành động</th><th>Chi tiết</th></tr></thead>
+                    <tbody>
+                    <tr th:each="l : ${logs}">
+                        <td class="text-nowrap small" th:text="${#temporals.format(l.createdAt, 'dd/MM HH:mm:ss')}">...</td>
+                        <td class="small"><span class="fw-semibold" th:text="${l.action}">ACTION</span><br><span class="text-muted" th:text="${l.username}">user</span></td>
+                        <td class="small" th:text="${l.detail}">chi tiết</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
